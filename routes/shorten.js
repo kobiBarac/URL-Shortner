@@ -10,25 +10,33 @@ var ID = function () {
 };
 
 function shorten (longUrl, callback) {
-    let urlId = ID();
-
-    let url = new Url();
-    url.longUrl = longUrl;
-    url.urlId = urlId;
-
-    console.log('longUrl: ' + longUrl);
-    console.log('urlId: ' + urlId);
-
-    url.save(function (err) {
+    Url.findOne({longUrl: longUrl}, {longUrl: 1, urlId: 1}, function (err, url) {
         if (err) {
-            console.log('err:');
-            console.log(err);
+            return callback(err);
         }
-        console.log('saved. ' + urlId +", " + longUrl);
-        return callback(err, url.urlId);
-    })
 
+        if (url) {
+            return callback(null, url.urlId);
+        }
 
+        let urlId = ID();
+
+        url = new Url();
+        url.longUrl = longUrl;
+        url.urlId = urlId;
+
+        console.log('longUrl: ' + longUrl);
+        console.log('urlId: ' + urlId);
+
+        url.save(function (err) {
+            if (err) {
+                console.log('err:');
+                console.log(err);
+            }
+            console.log('saved. ' + urlId +", " + longUrl);
+            return callback(err, url.urlId);
+        })
+    });
 }
 
 

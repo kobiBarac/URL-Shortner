@@ -20,7 +20,8 @@ router.get('/shorten', function(req, res, next) {
       return res.status(500).send({err: err});
     }
 
-    return res.status(200).send({urlId: urlId});
+    var fullUrl = req.headers.host + "/" + urlId
+    return res.status(200).send({urlId: urlId, fullUrl: fullUrl});
   });
 });
 
