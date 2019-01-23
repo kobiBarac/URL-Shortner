@@ -24,6 +24,13 @@ router.get('/shorten', function(req, res, next) {
 
 router.get('/:urlId', function(req, res, next) {
   var urlId = req.params.urlId;
+  if (!urlId) {
+    var html = "<h4>No UrlId</h4><br/>"
+    html += "Use " + req.headers.host + "/shorten?longUrl=https://www.google.com<br/>"
+    html += "save the returned urlId<br/>";
+    html += "Then call the short address " + req.headers.host + "/<urlId><br/>"
+    return res.status(200).send("No urlId.");
+  }
   var remoteAddress = (req.headers['x-forwarded-for'] ||
       req.connection.remoteAddress ||
       req.socket.remoteAddress ||
