@@ -4,7 +4,12 @@ var Url = require('../models/Urls');
 
 function redirect (urlId, agentData, callback) {
     Url.findOne({urlId: urlId},function (err, url) {
-        callback(err, url.longUrl);
+        if (err) {
+            return callback(err)
+        } else if (!url) {
+            return callback(null, {isFound: false})
+        }
+        callback(err, {isFound: true, longUrl: url.longUrl });
 
         var log = {
             timestamp: new Date(),

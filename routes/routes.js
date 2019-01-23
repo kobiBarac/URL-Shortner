@@ -7,6 +7,9 @@ var redirect = require('./redirect').redirect;
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+router.get('/favicon.ico', function(req, res, next) {
+  return res.status(204).send();
+});
 
 router.get('/shorten', function(req, res, next) {
   var longUrl = req.query.longUrl;
@@ -31,6 +34,7 @@ router.get('/:urlId', function(req, res, next) {
     html += "Then call the short address " + req.headers.host + "/<urlId><br/>"
     return res.status(200).send("No urlId.");
   }
+
   var remoteAddress = (req.headers['x-forwarded-for'] ||
       req.connection.remoteAddress ||
       req.socket.remoteAddress ||
@@ -41,12 +45,16 @@ router.get('/:urlId', function(req, res, next) {
     remoteAddress: remoteAddress,
     userAgent: userAgent
   };
-  redirect(urlId, userAgentData, function (err, longUrl) {
+  redirect(urlId, userAgentData, function (err, result) {
     if (err) {
       return res.status(500).send({err: err});
     }
 
-    return res.redirect(longUrl)
+    if (!result.isFound) {
+      return res.status(404).send("Page not found");
+    }
+
+    return res.redirect(result.longUrl)
   });
 });
 
