@@ -25,6 +25,20 @@ router.get('/shorten', function(req, res, next) {
   });
 });
 
+router.post('/shorten', function(req, res, next) {
+    var longUrl = req.body.longUrl;
+    var apiKey = req.query.apiKey;
+
+    shorten(longUrl, function (err, urlId) {
+        if (err) {
+            return res.status(500).send({err: err});
+        }
+
+        var fullUrl = req.headers.host + "/" + urlId
+        return res.status(200).send({urlId: urlId, fullUrl: fullUrl});
+    });
+});
+
 
 router.get('/:urlId', function(req, res, next) {
   var urlId = req.params.urlId;
