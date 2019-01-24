@@ -9,7 +9,7 @@ var ID = function () {
     return Math.random().toString(36).substr(2, 7);
 };
 
-function shorten (longUrl, callback) {
+function shorten (longUrl, userAgentData, callback) {
     Url.findOne({longUrl: longUrl}, {longUrl: 1, urlId: 1}, function (err, url) {
         if (err) {
             return callback(err);
@@ -27,6 +27,11 @@ function shorten (longUrl, callback) {
 
         console.log('longUrl: ' + longUrl);
         console.log('urlId: ' + urlId);
+
+        url.createdBy = {
+            remoteAddress: userAgentData.remoteAddress,
+            userAgent: userAgentData.userAgent
+        };
 
         url.save(function (err) {
             if (err) {

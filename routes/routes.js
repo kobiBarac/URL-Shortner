@@ -3,7 +3,21 @@ var router = express.Router();
 var shorten = require('./shorten').shorten;
 var redirect = require('./redirect').redirect;
 
-/* GET home page. */
+
+function getUserAgentData(req) {
+    var remoteAddress = (req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress).split(",")[0];
+
+    var userAgent = req.headers['user-agent'];
+    var userAgentData = {
+        remoteAddress: remoteAddress,
+        userAgent: userAgent
+    };
+
+    return userAgentData
+}
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
@@ -15,7 +29,9 @@ router.get('/shorten', function(req, res, next) {
   var longUrl = req.query.longUrl;
   var apiKey = req.query.apiKey;
 
-  shorten(longUrl, function (err, urlId) {
+  var userAgentData = getUserAgentData(req);
+
+  shorten(longUrl, userAgentData, function (err, urlId) {
     if (err) {
       return res.status(500).send({err: err});
     }
@@ -29,7 +45,9 @@ router.post('/shorten', function(req, res, next) {
     var longUrl = req.body.longUrl;
     var apiKey = req.query.apiKey;
 
-    shorten(longUrl, function (err, urlId) {
+    var userAgentData = getUserAgentData(req);
+
+    shorten(longUrl, userAgentData, function (err, urlId) {
         if (err) {
             return res.status(500).send({err: err});
         }
@@ -50,16 +68,8 @@ router.get('/:urlId', function(req, res, next) {
     return res.status(200).send("No urlId.");
   }
 
-  var remoteAddress = (req.headers['x-forwarded-for'] ||
-      req.connection.remoteAddress ||
-      req.socket.remoteAddress ||
-      req.connection.socket.remoteAddress).split(",")[0];
+  var userAgentData = getUserAgentData(req);
 
-  var userAgent = req.headers['user-agent'];
-  var userAgentData = {
-    remoteAddress: remoteAddress,
-    userAgent: userAgent
-  };
   redirect(urlId, userAgentData, function (err, result) {
     if (err) {
       return res.status(500).send({err: err});

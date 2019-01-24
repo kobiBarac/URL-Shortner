@@ -9,6 +9,10 @@ var urlsSchema = new mongoose.Schema({
     longUrl: {type: String, required: true, index: true},
     urlId: {type: String, required: true, index: true},
     urlExpiration: {type: Date, default: null},
+    createdBy: {
+        remoteAddress: {type: String},
+        userAgent: {type: String}
+    },
     logs: [
         {
             timestamp: {type: Date},
