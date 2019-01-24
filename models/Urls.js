@@ -6,8 +6,8 @@
 var mongoose = require('mongoose');
 
 var urlsSchema = new mongoose.Schema({
-    longUrl: {type: String, required: true},
-    urlId: {type: String, required: true},
+    longUrl: {type: String, required: true, index: true},
+    urlId: {type: String, required: true, index: true},
     urlExpiration: {type: Date, default: null},
     logs: [
         {

@@ -9,7 +9,8 @@ mongoose.connect(dbConnectionString, {
   socketTimeoutMS: 0,
   keepAlive: true,
   reconnectTries: 30,
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  autoIndex: false
 });
 
 console.log(dbConnectionString);
