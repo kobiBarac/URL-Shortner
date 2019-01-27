@@ -50,7 +50,7 @@ router.get('/shorten', function(req, res, next) {
 });
 
 router.post('/shorten', function(req, res, next) {
-    var longUrl = req.body.longUrl;
+    var longUrl = req.body.longUrl || req.query.longUrl;
     var apiKey = req.query.apiKey;
 
     var userAgentData = getUserAgentData(req);
