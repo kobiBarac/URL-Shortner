@@ -25,6 +25,14 @@ router.get('/favicon.ico', function(req, res, next) {
   return res.status(204).send();
 });
 
+function prepateResult(longUrl, urlId, hostUrl) {
+
+    var results = {};
+    var shortUrl = hostUrl + "/" + urlId;
+    results[longUrl] = {shortUrl: shortUrl, urlId: urlId, userHash: urlId, shortCNAMEUrl: shortUrl};
+    return results;
+}
+
 router.get('/shorten', function(req, res, next) {
   var longUrl = req.query.longUrl;
   var apiKey = req.query.apiKey;
@@ -36,8 +44,8 @@ router.get('/shorten', function(req, res, next) {
       return res.status(500).send({err: err});
     }
 
-    var fullUrl = req.headers.host + "/" + urlId
-    return res.status(200).send({urlId: urlId, fullUrl: fullUrl});
+      var results = prepateResult(longUrl,urlId,req.headers.host);
+      return res.status(200).send({results: results});
   });
 });
 
@@ -52,8 +60,8 @@ router.post('/shorten', function(req, res, next) {
             return res.status(500).send({err: err});
         }
 
-        var fullUrl = req.headers.host + "/" + urlId
-        return res.status(200).send({urlId: urlId, fullUrl: fullUrl});
+        var results = prepateResult(longUrl,urlId,req.headers.host);
+        return res.status(200).send({results: results});
     });
 });
 
