@@ -28,7 +28,7 @@ router.get('/favicon.ico', function(req, res, next) {
 function prepateResult(longUrl, urlId, hostUrl) {
 
     var results = {};
-    var shortUrl = hostUrl + "/" + urlId;
+    var shortUrl = 'http://' + hostUrl + "/" + urlId;
     results[longUrl] = {shortUrl: shortUrl, urlId: urlId, userHash: urlId, shortCNAMEUrl: shortUrl};
     return results;
 }
