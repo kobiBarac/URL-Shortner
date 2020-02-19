@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
-var dbConnectionString = "mongodb://url_admin:URLADMIN4RFVAJFR5646@ds012129-a0.mlab.com:12129,ds012129-a1.mlab.com:12128/url_shortener?replicaSet=rs-ds012129";
+var dbConnectionString = process.env.dbConnectionString;
 mongoose.connect(dbConnectionString, {
   socketTimeoutMS: 0,
   keepAlive: true,
