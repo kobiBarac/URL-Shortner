@@ -1,0 +1,11 @@
+node_modules
+azure.err
+*.publishsettings
+*.xml
+*.log
+idea/
+.idea/
+*idea/
+apidoc/
+server/config.js
+.vscode/
