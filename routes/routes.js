@@ -19,7 +19,7 @@ function getUserAgentData(req) {
     return userAgentData
 }
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'This is working!' });
 });
 router.get('/favicon.ico', function(req, res, next) {
   return res.status(204).send();
